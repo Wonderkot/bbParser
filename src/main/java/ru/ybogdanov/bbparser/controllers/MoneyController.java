@@ -16,9 +16,9 @@ public class MoneyController {
     private final MoneyDataService moneyDataService;
 
     @GetMapping
+    @RequestMapping("/refresh")
     public List<MoneyData> refresh() {
         moneyDataService.refresh();
         return moneyDataService.getMoneyData();
     }
-
 }
