@@ -5,15 +5,16 @@ import org.springframework.stereotype.Service;
 import ru.ybogdanov.bbparser.domain.MoneyData;
 import ru.ybogdanov.bbparser.interfaces.MoneyDataService;
 import ru.ybogdanov.bbparser.repository.MoneyDataRepository;
-import ru.ybogdanov.bbparser.service.parser.BbParserServiceImpl;
+import ru.ybogdanov.bbparser.service.parser.CbParserServiceImpl;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BbServiceImpl implements MoneyDataService {
+public class CbServiceImpl implements MoneyDataService {
     private final MoneyDataRepository moneyDataRepository;
-    private final BbParserServiceImpl bbParserService;
+    private final CbParserServiceImpl cbParserService;
+
     @Override
     public List<MoneyData> getMoneyData() {
         return moneyDataRepository.findAll();
@@ -21,7 +22,7 @@ public class BbServiceImpl implements MoneyDataService {
 
     @Override
     public void refresh() {
-        bbParserService.parse();
+        cbParserService.parse();
     }
 
     @Override

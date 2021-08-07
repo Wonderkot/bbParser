@@ -1,5 +1,5 @@
 package ru.ybogdanov.bbparser.interfaces;
 
-public interface BbParserService {
+public interface ParserService {
     void parse();
 }

@@ -1,10 +1,11 @@
-package ru.ybogdanov.bbparser.service;
+package ru.ybogdanov.bbparser.service.parser;
 
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import ru.ybogdanov.bbparser.domain.MoneyData;
 import ru.ybogdanov.bbparser.enums.Bank;
-import ru.ybogdanov.bbparser.interfaces.BbParserService;
+import ru.ybogdanov.bbparser.interfaces.ParserService;
 import ru.ybogdanov.bbparser.repository.MoneyDataRepository;
 
 import java.math.BigDecimal;
@@ -14,13 +15,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 
-import org.json.JSONObject;
-
 @RequiredArgsConstructor
 @Service
-public class BbParserServiceImpl implements BbParserService {
+public class CbParserServiceImpl implements ParserService {
 
-    public static final String GET_URL = "https://www.bystrobank.ru/sitecurrency/data/CurrentExchangeRates_izhevsk.js";
+    public static final String GET_URL = "https://www.cbr-xml-daily.ru/daily_json.js";
     private final MoneyDataRepository moneyDataRepository;
 
     @Override
@@ -33,11 +32,11 @@ public class BbParserServiceImpl implements BbParserService {
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             JSONObject json = new JSONObject(response.body());
-            BigDecimal buy =  json.getJSONArray("banks").getJSONObject(0).getJSONObject("usd").getBigDecimal("buy");
+            BigDecimal buy =  json.getJSONObject("Valute").getJSONObject("USD").getBigDecimal("Value");
             MoneyData moneyData = new MoneyData();
             moneyData.setCurrency(buy);
             moneyData.setDate(LocalDateTime.now());
-            moneyData.setBank(Bank.BYSTRO_BANK);
+            moneyData.setBank(Bank.CENTRAL_BANK);
             moneyDataRepository.save(moneyData);
         } catch (Exception e) {
             e.printStackTrace();
